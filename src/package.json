@@ -1,0 +1,19 @@
+{
+  "name": "genoa-township",
+  "version": "1.0.0",
+  "description": "An Alexa skill for the residents of Genoa Township",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "alexa",
+    "genoa",
+    "township"
+  ],
+  "author": "Amazon.com",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "alexa-sdk": "^1.0.25"
+  }
+}

@@ -1,0 +1,241 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Alexa Devs Skill",
+		"_postman_id": "4d946219-0d0f-d1ed-251d-eda37140efa3",
+		"description": "This is the suite of tests for the Alexa Devs Skill.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "\"OPEN DEV TIPS\" - LaunchRequest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Does not end session\"] = jsonData.response.shouldEndSession === false;",
+							"tests[\"RepromptSpeech is included in response\"] = jsonData.response.reprompt.outputSpeech.ssml != \"<speak>  </speak>\";",
+							"tests[\"Response time is less than 200ms\"] = responseTime < 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://0acgzvtjzc.execute-api.us-east-1.amazonaws.com/Test/alexadevskillresource",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"session\": {\n    \"new\": true,\n    \"sessionId\": \"SessionId.384b1563-9bf8-48ef-b666-55713a02ea0a\",\n    \"application\": {\n      \"applicationId\": \"amzn1.ask.skill.f8362a32-ff98-444a-90d7-5e33e9189561\"\n    },\n    \"attributes\": {},\n    \"user\": {\n      \"userId\": \"amzn1.ask.account.AH6TYA5TO5RMHSW57BGJYCMNORSFVVISNX33VJVCGVPJDP7U4FVC4K4GEMLNQ4JVPUB4C4I77WD2VAMYFZGHZMQAIZ3NYMXHOTBU5EJUXEVAZBFXDNOSEU35JC7MYUK6QC6EI5Y3JNO6ZNIAWTLUSVAWFDY67ANUJK5JTN7AHYM3XCP7FI6ZN4XRC3TD3XQHUUKPKZ4VH3GYC4I\"\n    }\n  },\n  \"request\": {\n    \"type\": \"LaunchRequest\",\n    \"requestId\": \"EdwRequestId.26a46e82-877b-419e-b79f-06bfc48b59b9\",\n    \"locale\": \"en-US\",\n    \"timestamp\": \"2017-08-16T18:40:14Z\"\n  },\n  \"context\": {\n    \"AudioPlayer\": {\n      \"playerActivity\": \"IDLE\"\n    },\n    \"System\": {\n      \"application\": {\n        \"applicationId\": \"amzn1.ask.skill.f8362a32-ff98-444a-90d7-5e33e9189561\"\n      },\n      \"user\": {\n        \"userId\": \"amzn1.ask.account.AH6TYA5TO5RMHSW57BGJYCMNORSFVVISNX33VJVCGVPJDP7U4FVC4K4GEMLNQ4JVPUB4C4I77WD2VAMYFZGHZMQAIZ3NYMXHOTBU5EJUXEVAZBFXDNOSEU35JC7MYUK6QC6EI5Y3JNO6ZNIAWTLUSVAWFDY67ANUJK5JTN7AHYM3XCP7FI6ZN4XRC3TD3XQHUUKPKZ4VH3GYC4I\"\n      },\n      \"device\": {\n        \"supportedInterfaces\": {\n          \"Display\": {\n            \"templateVersion\": \"1\",\n            \"markupVersion\": \"1\"\n          }\n        }\n      }\n    }\n  },\n  \"version\": \"1.0\"\n}"
+				},
+				"description": "\"Open dev tips\" - Launch Request"
+			},
+			"response": []
+		},
+		{
+			"name": "\"GIVE ME THE NEWS\" - GetNewsIntent",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Does not end session\"] = jsonData.response.shouldEndSession === false;",
+							"tests[\"RepromptSpeech is included in response\"] = jsonData.response.reprompt.outputSpeech.ssml != \"<speak>  </speak>\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://0acgzvtjzc.execute-api.us-east-1.amazonaws.com/Test/alexadevskillresource",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"session\": {\n    \"new\": false,\n    \"sessionId\": \"SessionId.384b1563-9bf8-48ef-b666-55713a02ea0a\",\n    \"application\": {\n      \"applicationId\": \"amzn1.ask.skill.f8362a32-ff98-444a-90d7-5e33e9189561\"\n    },\n    \"attributes\": {},\n    \"user\": {\n      \"userId\": \"amzn1.ask.account.AH6TYA5TO5RMHSW57BGJYCMNORSFVVISNX33VJVCGVPJDP7U4FVC4K4GEMLNQ4JVPUB4C4I77WD2VAMYFZGHZMQAIZ3NYMXHOTBU5EJUXEVAZBFXDNOSEU35JC7MYUK6QC6EI5Y3JNO6ZNIAWTLUSVAWFDY67ANUJK5JTN7AHYM3XCP7FI6ZN4XRC3TD3XQHUUKPKZ4VH3GYC4I\"\n    }\n  },\n  \"request\": {\n    \"type\": \"IntentRequest\",\n    \"requestId\": \"EdwRequestId.01c6ec27-127f-4516-ab29-6752528f01b9\",\n    \"intent\": {\n      \"name\": \"GetNewsIntent\",\n      \"slots\": {}\n    },\n    \"locale\": \"en-US\",\n    \"timestamp\": \"2017-08-16T19:06:39Z\"\n  },\n  \"context\": {\n    \"AudioPlayer\": {\n      \"playerActivity\": \"IDLE\"\n    },\n    \"System\": {\n      \"application\": {\n        \"applicationId\": \"amzn1.ask.skill.f8362a32-ff98-444a-90d7-5e33e9189561\"\n      },\n      \"user\": {\n        \"userId\": \"amzn1.ask.account.AH6TYA5TO5RMHSW57BGJYCMNORSFVVISNX33VJVCGVPJDP7U4FVC4K4GEMLNQ4JVPUB4C4I77WD2VAMYFZGHZMQAIZ3NYMXHOTBU5EJUXEVAZBFXDNOSEU35JC7MYUK6QC6EI5Y3JNO6ZNIAWTLUSVAWFDY67ANUJK5JTN7AHYM3XCP7FI6ZN4XRC3TD3XQHUUKPKZ4VH3GYC4I\"\n      },\n      \"device\": {\n        \"supportedInterfaces\": {\n          \"Display\": {\n            \"templateVersion\": \"1\",\n            \"markupVersion\": \"1\"\n          }\n        }\n      }\n    }\n  },\n  \"version\": \"1.0\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "\"HOW DO I SAVE DATA\" - PersistenceIntent",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Does not end session\"] = jsonData.response.shouldEndSession === false;",
+							"tests[\"RepromptSpeech is included in response\"] = jsonData.response.reprompt.outputSpeech.ssml != \"<speak>  </speak>\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://0acgzvtjzc.execute-api.us-east-1.amazonaws.com/Test/alexadevskillresource",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"session\": {\n    \"new\": true,\n    \"sessionId\": \"SessionId.4a755652-1f9d-4a33-a11d-3d380324cdfc\",\n    \"application\": {\n      \"applicationId\": \"amzn1.ask.skill.f8362a32-ff98-444a-90d7-5e33e9189561\"\n    },\n    \"attributes\": {},\n    \"user\": {\n      \"userId\": \"amzn1.ask.account.AH6TYA5TO5RMHSW57BGJYCMNORSFVVISNX33VJVCGVPJDP7U4FVC4K4GEMLNQ4JVPUB4C4I77WD2VAMYFZGHZMQAIZ3NYMXHOTBU5EJUXEVAZBFXDNOSEU35JC7MYUK6QC6EI5Y3JNO6ZNIAWTLUSVAWFDY67ANUJK5JTN7AHYM3XCP7FI6ZN4XRC3TD3XQHUUKPKZ4VH3GYC4I\"\n    }\n  },\n  \"request\": {\n    \"type\": \"IntentRequest\",\n    \"requestId\": \"EdwRequestId.ab4eb1da-3457-4201-b254-f75bf358242c\",\n    \"intent\": {\n      \"name\": \"PersistenceIntent\",\n      \"slots\": {}\n    },\n    \"locale\": \"en-US\",\n    \"timestamp\": \"2017-08-16T19:28:21Z\"\n  },\n  \"context\": {\n    \"AudioPlayer\": {\n      \"playerActivity\": \"IDLE\"\n    },\n    \"System\": {\n      \"application\": {\n        \"applicationId\": \"amzn1.ask.skill.f8362a32-ff98-444a-90d7-5e33e9189561\"\n      },\n      \"user\": {\n        \"userId\": \"amzn1.ask.account.AH6TYA5TO5RMHSW57BGJYCMNORSFVVISNX33VJVCGVPJDP7U4FVC4K4GEMLNQ4JVPUB4C4I77WD2VAMYFZGHZMQAIZ3NYMXHOTBU5EJUXEVAZBFXDNOSEU35JC7MYUK6QC6EI5Y3JNO6ZNIAWTLUSVAWFDY67ANUJK5JTN7AHYM3XCP7FI6ZN4XRC3TD3XQHUUKPKZ4VH3GYC4I\"\n      },\n      \"device\": {\n        \"supportedInterfaces\": {\n          \"Display\": {\n            \"templateVersion\": \"1\",\n            \"markupVersion\": \"1\"\n          }\n        }\n      }\n    }\n  },\n  \"version\": \"1.0\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "\"HELP\" - AMAZON.HelpIntent",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Does not end session\"] = jsonData.response.shouldEndSession === false;",
+							"tests[\"RepromptSpeech is included in response\"] = jsonData.response.reprompt.outputSpeech.ssml != \"<speak>  </speak>\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://0acgzvtjzc.execute-api.us-east-1.amazonaws.com/Test/alexadevskillresource",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"session\": {\n    \"new\": false,\n    \"sessionId\": \"SessionId.4a755652-1f9d-4a33-a11d-3d380324cdfc\",\n    \"application\": {\n      \"applicationId\": \"amzn1.ask.skill.f8362a32-ff98-444a-90d7-5e33e9189561\"\n    },\n    \"attributes\": {},\n    \"user\": {\n      \"userId\": \"amzn1.ask.account.AH6TYA5TO5RMHSW57BGJYCMNORSFVVISNX33VJVCGVPJDP7U4FVC4K4GEMLNQ4JVPUB4C4I77WD2VAMYFZGHZMQAIZ3NYMXHOTBU5EJUXEVAZBFXDNOSEU35JC7MYUK6QC6EI5Y3JNO6ZNIAWTLUSVAWFDY67ANUJK5JTN7AHYM3XCP7FI6ZN4XRC3TD3XQHUUKPKZ4VH3GYC4I\"\n    }\n  },\n  \"request\": {\n    \"type\": \"IntentRequest\",\n    \"requestId\": \"EdwRequestId.d79e185b-638c-4dd8-8b95-2b6584162213\",\n    \"intent\": {\n      \"name\": \"AMAZON.HelpIntent\",\n      \"slots\": {}\n    },\n    \"locale\": \"en-US\",\n    \"timestamp\": \"2017-08-16T19:49:20Z\"\n  },\n  \"context\": {\n    \"AudioPlayer\": {\n      \"playerActivity\": \"IDLE\"\n    },\n    \"System\": {\n      \"application\": {\n        \"applicationId\": \"amzn1.ask.skill.f8362a32-ff98-444a-90d7-5e33e9189561\"\n      },\n      \"user\": {\n        \"userId\": \"amzn1.ask.account.AH6TYA5TO5RMHSW57BGJYCMNORSFVVISNX33VJVCGVPJDP7U4FVC4K4GEMLNQ4JVPUB4C4I77WD2VAMYFZGHZMQAIZ3NYMXHOTBU5EJUXEVAZBFXDNOSEU35JC7MYUK6QC6EI5Y3JNO6ZNIAWTLUSVAWFDY67ANUJK5JTN7AHYM3XCP7FI6ZN4XRC3TD3XQHUUKPKZ4VH3GYC4I\"\n      },\n      \"device\": {\n        \"supportedInterfaces\": {\n          \"Display\": {\n            \"templateVersion\": \"1\",\n            \"markupVersion\": \"1\"\n          }\n        }\n      }\n    }\n  },\n  \"version\": \"1.0\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "\"STOP\" - AMAZON.StopIntent",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Session ends\"] = jsonData.response.shouldEndSession === true;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://0acgzvtjzc.execute-api.us-east-1.amazonaws.com/Test/alexadevskillresource",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"session\": {\n    \"new\": false,\n    \"sessionId\": \"SessionId.4a755652-1f9d-4a33-a11d-3d380324cdfc\",\n    \"application\": {\n      \"applicationId\": \"amzn1.ask.skill.f8362a32-ff98-444a-90d7-5e33e9189561\"\n    },\n    \"attributes\": {},\n    \"user\": {\n      \"userId\": \"amzn1.ask.account.AH6TYA5TO5RMHSW57BGJYCMNORSFVVISNX33VJVCGVPJDP7U4FVC4K4GEMLNQ4JVPUB4C4I77WD2VAMYFZGHZMQAIZ3NYMXHOTBU5EJUXEVAZBFXDNOSEU35JC7MYUK6QC6EI5Y3JNO6ZNIAWTLUSVAWFDY67ANUJK5JTN7AHYM3XCP7FI6ZN4XRC3TD3XQHUUKPKZ4VH3GYC4I\"\n    }\n  },\n  \"request\": {\n    \"type\": \"IntentRequest\",\n    \"requestId\": \"EdwRequestId.c9e244a1-443f-43b0-9171-026ff19df0ef\",\n    \"intent\": {\n      \"name\": \"AMAZON.StopIntent\",\n      \"slots\": {}\n    },\n    \"locale\": \"en-US\",\n    \"timestamp\": \"2017-08-16T19:51:53Z\"\n  },\n  \"context\": {\n    \"AudioPlayer\": {\n      \"playerActivity\": \"IDLE\"\n    },\n    \"System\": {\n      \"application\": {\n        \"applicationId\": \"amzn1.ask.skill.f8362a32-ff98-444a-90d7-5e33e9189561\"\n      },\n      \"user\": {\n        \"userId\": \"amzn1.ask.account.AH6TYA5TO5RMHSW57BGJYCMNORSFVVISNX33VJVCGVPJDP7U4FVC4K4GEMLNQ4JVPUB4C4I77WD2VAMYFZGHZMQAIZ3NYMXHOTBU5EJUXEVAZBFXDNOSEU35JC7MYUK6QC6EI5Y3JNO6ZNIAWTLUSVAWFDY67ANUJK5JTN7AHYM3XCP7FI6ZN4XRC3TD3XQHUUKPKZ4VH3GYC4I\"\n      },\n      \"device\": {\n        \"supportedInterfaces\": {\n          \"Display\": {\n            \"templateVersion\": \"1\",\n            \"markupVersion\": \"1\"\n          }\n        }\n      }\n    }\n  },\n  \"version\": \"1.0\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "\"EXIT\" - SessionEndedRequest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Skill returns null for SessionEndedRequest\"] = responseBody === \"null\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://0acgzvtjzc.execute-api.us-east-1.amazonaws.com/Test/alexadevskillresource",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"session\": {\n    \"new\": true,\n    \"sessionId\": \"SessionId.b680507c-e953-4a72-8caf-619fd53149d1\",\n    \"application\": {\n      \"applicationId\": \"amzn1.ask.skill.f8362a32-ff98-444a-90d7-5e33e9189561\"\n    },\n    \"attributes\": {},\n    \"user\": {\n      \"userId\": \"amzn1.ask.account.AH6TYA5TO5RMHSW57BGJYCMNORSFVVISNX33VJVCGVPJDP7U4FVC4K4GEMLNQ4JVPUB4C4I77WD2VAMYFZGHZMQAIZ3NYMXHOTBU5EJUXEVAZBFXDNOSEU35JC7MYUK6QC6EI5Y3JNO6ZNIAWTLUSVAWFDY67ANUJK5JTN7AHYM3XCP7FI6ZN4XRC3TD3XQHUUKPKZ4VH3GYC4I\"\n    }\n  },\n  \"request\": {\n    \"type\": \"SessionEndedRequest\",\n    \"requestId\": \"EdwRequestId.cea078cd-525d-48a5-a787-35a1999b020e\",\n    \"reason\": \"USER_INITIATED\",\n    \"locale\": \"en-US\",\n    \"timestamp\": \"2017-08-17T12:17:37Z\"\n  },\n  \"context\": {\n    \"AudioPlayer\": {\n      \"playerActivity\": \"IDLE\"\n    },\n    \"System\": {\n      \"application\": {\n        \"applicationId\": \"amzn1.ask.skill.f8362a32-ff98-444a-90d7-5e33e9189561\"\n      },\n      \"user\": {\n        \"userId\": \"amzn1.ask.account.AH6TYA5TO5RMHSW57BGJYCMNORSFVVISNX33VJVCGVPJDP7U4FVC4K4GEMLNQ4JVPUB4C4I77WD2VAMYFZGHZMQAIZ3NYMXHOTBU5EJUXEVAZBFXDNOSEU35JC7MYUK6QC6EI5Y3JNO6ZNIAWTLUSVAWFDY67ANUJK5JTN7AHYM3XCP7FI6ZN4XRC3TD3XQHUUKPKZ4VH3GYC4I\"\n      },\n      \"device\": {\n        \"supportedInterfaces\": {\n          \"Display\": {\n            \"templateVersion\": \"1\",\n            \"markupVersion\": \"1\"\n          }\n        }\n      }\n    }\n  },\n  \"version\": \"1.0\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "\"CANCEL\" - AMAZON.CancelIntent",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Session ends\"] = jsonData.response.shouldEndSession === true;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://0acgzvtjzc.execute-api.us-east-1.amazonaws.com/Test/alexadevskillresource",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"session\": {\n    \"new\": false,\n    \"sessionId\": \"SessionId.4a755652-1f9d-4a33-a11d-3d380324cdfc\",\n    \"application\": {\n      \"applicationId\": \"amzn1.ask.skill.f8362a32-ff98-444a-90d7-5e33e9189561\"\n    },\n    \"attributes\": {},\n    \"user\": {\n      \"userId\": \"amzn1.ask.account.AH6TYA5TO5RMHSW57BGJYCMNORSFVVISNX33VJVCGVPJDP7U4FVC4K4GEMLNQ4JVPUB4C4I77WD2VAMYFZGHZMQAIZ3NYMXHOTBU5EJUXEVAZBFXDNOSEU35JC7MYUK6QC6EI5Y3JNO6ZNIAWTLUSVAWFDY67ANUJK5JTN7AHYM3XCP7FI6ZN4XRC3TD3XQHUUKPKZ4VH3GYC4I\"\n    }\n  },\n  \"request\": {\n    \"type\": \"IntentRequest\",\n    \"requestId\": \"EdwRequestId.000f595f-926f-489f-ac89-4a2438913e63\",\n    \"intent\": {\n      \"name\": \"AMAZON.CancelIntent\",\n      \"slots\": {}\n    },\n    \"locale\": \"en-US\",\n    \"timestamp\": \"2017-08-16T19:52:51Z\"\n  },\n  \"context\": {\n    \"AudioPlayer\": {\n      \"playerActivity\": \"IDLE\"\n    },\n    \"System\": {\n      \"application\": {\n        \"applicationId\": \"amzn1.ask.skill.f8362a32-ff98-444a-90d7-5e33e9189561\"\n      },\n      \"user\": {\n        \"userId\": \"amzn1.ask.account.AH6TYA5TO5RMHSW57BGJYCMNORSFVVISNX33VJVCGVPJDP7U4FVC4K4GEMLNQ4JVPUB4C4I77WD2VAMYFZGHZMQAIZ3NYMXHOTBU5EJUXEVAZBFXDNOSEU35JC7MYUK6QC6EI5Y3JNO6ZNIAWTLUSVAWFDY67ANUJK5JTN7AHYM3XCP7FI6ZN4XRC3TD3XQHUUKPKZ4VH3GYC4I\"\n      },\n      \"device\": {\n        \"supportedInterfaces\": {\n          \"Display\": {\n            \"templateVersion\": \"1\",\n            \"markupVersion\": \"1\"\n          }\n        }\n      }\n    }\n  },\n  \"version\": \"1.0\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
