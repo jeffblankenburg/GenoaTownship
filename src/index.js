@@ -10,7 +10,7 @@ var APP_ID = undefined;  // TODO replace with your app ID (OPTIONAL).
 var LOCATION_NEWS = "1lgdwXd2iCPIWMf6fppnZn9TtHz8odYnj91JqDL6r9dg/values/NEWS!A3:Z1000";
 var LOCATION_ANSWERS = "1lgdwXd2iCPIWMf6fppnZn9TtHz8odYnj91JqDL6r9dg/values/ANSWERS!A3:Z1000";
 var LOCATION_QUESTIONS = "1lgdwXd2iCPIWMf6fppnZn9TtHz8odYnj91JqDL6r9dg/values/QUESTIONS!!A3:Z1000";
-var LOCATION_HELP = "1lgdwXd2iCPIWMf6fppnZn9TtHz8odYnj91JqDL6r9dg/values/HELP!A3:Z1000";
+var LOCATION_HELP = "1lgdwXd2iCPIWMf6fppnZn9TtHz8odYnj91JqDL6r9dg/values/HELP!A2:Z1000";
 
 var imagePrefix = "";
 
@@ -59,18 +59,16 @@ var startHandlers = Alexa.CreateStateHandler(states.START,{
         this.emit(":responseReady");
     },
     "NewsIntent": function () {
-        //LIST TEMPLATE FOR DISPLAY?
         console.log("FULL REQUEST = " + JSON.stringify(this.event));
         httpsGet(LOCATION_NEWS, (result) => {
             console.log("RESULT = " + JSON.stringify(result));
-            //var date = new Date();
-            //var news = getDataByCountry.call(this, result);
-            //var speechText = "Here is your Genoa Township news for " + date.toDateString() + ". " + getVoiceNews(news) + getRandomQuestion();
-            //this.response.speak(speechText).listen(getRandomQuestion());
-            this.response.speak("I don't have any news yet.  Is there something else I can help you with?").listen(getRandomQuestion());
-            //this.response.cardRenderer("ALEXA DEVELOPER NEWS", getCardNews(news));
+            var date = new Date();
+            var speechText = "Here is your Genoa Township news for " + date.toDateString() + ". " + getVoiceNews(result) + getRandomQuestion();
+            this.response.speak(speechText).listen(getRandomQuestion());
+            //this.response.speak("I don't have any news yet.  Is there something else I can help you with?").listen(getRandomQuestion());
+            this.response.cardRenderer("GENOA TOWNSHIP NEWS FOR " + date.toDateString(), getCardNews(result), {smallImageUrl: "https://s3.amazonaws.com/genoatownship/genoatownship.jpg", largeImageUrl: "https://s3.amazonaws.com/genoatownship/genoatownship.jpg"});
             //if (supportsDisplay.call(this)) this.response.renderTemplate(buildListDisplayTemplateForNews(news));
-            //this.emit(":responseReady");
+            this.emit(":responseReady");
         });
     },
     "GetRandomItemIntent": function () {
@@ -215,13 +213,13 @@ function getVoiceSpeechResponse(answer)
 
 function getSmallCardImage(answer)
 {
-    if ((answer[5] === undefined)||(answer[5] === "")) return "https://i.pinimg.com/originals/e1/a1/5f/e1a15f63f368417619aa110ecfc8be4b.png";
+    if ((answer[5] === undefined)||(answer[5] === "")) return "https://s3.amazonaws.com/genoatownship/genoatownship.jpg";
     else return answer[5];
 }
 
 function getLargeCardImage(answer)
 {
-    if ((answer[6] === undefined)||(answer[6] === "")) return "https://i.pinimg.com/originals/e1/a1/5f/e1a15f63f368417619aa110ecfc8be4b.png";
+    if ((answer[6] === undefined)||(answer[6] === "")) return "https://s3.amazonaws.com/genoatownship/genoatownship.jpg";
     else return answer[6];
 }
 
@@ -247,22 +245,20 @@ function getRandomTip(tips)
 function getVoiceNews(list)
 {
     var voiceNews = "";
-    for (var i = 0; i < list.length; i++)
+    for (var i = 0; i < list.values.length; i++)
     {
-        voiceNews = voiceNews + list[i][1] + "<break time='.5s'/>" + list[i][2] + "<break time='1s'/>";
+        voiceNews = voiceNews + list.values[i][0] + "<break time='.5s'/>" + list.values[i][1] + "<break time='1s'/>";
     }
-
     return voiceNews;
 }
 
 function getCardNews(list)
 {
     var cardNews = "";
-    for (var i = 0; i < list.length; i++)
+    for (var i = 0; i < list.values.length; i++)
     {
-        cardNews = cardNews + list[i][1].toUpperCase() + "\n" + list[i][3] + "\n" + list[i][4] + "\n \n";
+        cardNews = cardNews + list.values[i][0].toUpperCase() + "\n" + list.values[i][1] + "\n \n";
     }
-
     return cardNews;
 }
 
@@ -364,7 +360,6 @@ function getRandomWelcomeQuestion()
 
 function getRandomHelpMessage(data)
 {
-    data = getDataByCountry.call(this, data);
     var random = getRandom(0, data.length-1);
     console.log("RANDOM HELP MESSAGE = " + JSON.stringify(random));
     return data[random][1];
@@ -380,11 +375,7 @@ function getRandomGoodbyeMessage()
                    "Have fun storming the castle!",
                    "See you later alligator!",
                    "Catch you next time!",
-                   "After while, crocodile!",
-                   "<say-as interpret-as='interjection'>arrivederci</say-as>",
-                   "<say-as interpret-as='interjection'>aloha</say-as>", 
-                   "<say-as interpret-as='interjection'>au revoir</say-as>", 
-                   "<say-as interpret-as='interjection'>bon voyage</say-as>"];
+                   "After while, crocodile!"];
     var random = getRandom(0, messages.length-1);
     return messages[random];
 }
@@ -397,14 +388,6 @@ function getRandomConfusionMessage()
                    "There's a chance I misunderstood you, but I don't know how to answer your question.",
                    "I'm sorry. I don't know how to help you with that.",
                    "I don't have an answer for you today, but I'll add it to my list of things I should learn soon!"];
-    var random = getRandom(0, messages.length-1);
-    return spokenWords + "<break time='500ms'/>" + messages[random];
-}
-
-function getRandomConfusionMessageDisplayTemplate()
-{
-    var spokenWords = "I heard you say " + this.event.request.intent.slots.displaytemplate.value + " ";
-    var messages = ["I think you're asking me about one of the Display Templates, but I don't seem to know that one.", "I can show you any of the display templates, but you asked for one I'm not familiar with."];
     var random = getRandom(0, messages.length-1);
     return spokenWords + "<break time='500ms'/>" + messages[random];
 }
