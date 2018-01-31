@@ -53,18 +53,24 @@ var startHandlers = Alexa.CreateStateHandler(states.START,{
             this.emit(":responseReady");           
         }
     },
+    "MeetingAudioIntent": function () {
+        this.response.audioPlayer("play", "REPLACE_ALL", "https://internal.genoatwp.com/webdocuments/public/audio/Trustee/2018/2018-01-22%20Trustee%20Zoning%20Meeting.mp3", "token", null, 0);
+        console.log("THIS.RESPONSE FOR AUDIO MEETING FILE = " + JSON.stringify(this.response));
+        this.emit(":responseReady");
+    },
     "NewsIntent": function () {
         //LIST TEMPLATE FOR DISPLAY?
         console.log("FULL REQUEST = " + JSON.stringify(this.event));
         httpsGet(LOCATION_NEWS, (result) => {
             console.log("RESULT = " + JSON.stringify(result));
-            var date = new Date();
-            var news = getDataByCountry.call(this, result);
-            var speechText = "Here is your Genoa Township news for " + date.toDateString() + ". " + getVoiceNews(news) + getRandomQuestion();
-            this.response.speak(speechText).listen(getRandomQuestion());
-            this.response.cardRenderer("ALEXA DEVELOPER NEWS", getCardNews(news));
-            if (supportsDisplay.call(this)) this.response.renderTemplate(buildListDisplayTemplateForNews(news));
-            this.emit(":responseReady");
+            //var date = new Date();
+            //var news = getDataByCountry.call(this, result);
+            //var speechText = "Here is your Genoa Township news for " + date.toDateString() + ". " + getVoiceNews(news) + getRandomQuestion();
+            //this.response.speak(speechText).listen(getRandomQuestion());
+            this.response.speak("I don't have any news yet.  Is there something else I can help you with?").listen(getRandomQuestion());
+            //this.response.cardRenderer("ALEXA DEVELOPER NEWS", getCardNews(news));
+            //if (supportsDisplay.call(this)) this.response.renderTemplate(buildListDisplayTemplateForNews(news));
+            //this.emit(":responseReady");
         });
     },
     "GetRandomItemIntent": function () {
@@ -209,13 +215,13 @@ function getVoiceSpeechResponse(answer)
 
 function getSmallCardImage(answer)
 {
-    if ((answer[5] === undefined)||(answer[5] === "")) return "https://m.media-amazon.com/images/G/01/mobile-apps/dex/alexa/alexa-skills-kit/alexa-devs-skill/display-templates/images/placeholder-340x340._TTH_.png";
+    if ((answer[5] === undefined)||(answer[5] === "")) return "https://i.pinimg.com/originals/e1/a1/5f/e1a15f63f368417619aa110ecfc8be4b.png";
     else return answer[5];
 }
 
 function getLargeCardImage(answer)
 {
-    if ((answer[6] === undefined)||(answer[6] === "")) return "https://m.media-amazon.com/images/G/01/mobile-apps/dex/alexa/alexa-skills-kit/alexa-devs-skill/display-templates/images/placeholder-340x340._TTH_.png";
+    if ((answer[6] === undefined)||(answer[6] === "")) return "https://i.pinimg.com/originals/e1/a1/5f/e1a15f63f368417619aa110ecfc8be4b.png";
     else return answer[6];
 }
 
