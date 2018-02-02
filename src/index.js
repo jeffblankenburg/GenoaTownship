@@ -4,12 +4,15 @@ var Alexa = require("alexa-sdk");
 var AWS = require("aws-sdk");
 var https = require("https");
 var util = require("util");
+var dashbot = require("dashbot")("gvq1jK9xKT27awQBFgO11zBUfW4usyjBFVxSjC5m").alexa;
+var audioData = require('./audioAssets.js');
+var controller = require('./audioController.js');
 
 var APP_ID = undefined;  // TODO replace with your app ID (OPTIONAL).
 
 var LOCATION_NEWS = "1lgdwXd2iCPIWMf6fppnZn9TtHz8odYnj91JqDL6r9dg/values/NEWS!A3:Z1000";
 var LOCATION_ANSWERS = "1lgdwXd2iCPIWMf6fppnZn9TtHz8odYnj91JqDL6r9dg/values/ANSWERS!A3:Z1000";
-var LOCATION_QUESTIONS = "1lgdwXd2iCPIWMf6fppnZn9TtHz8odYnj91JqDL6r9dg/values/QUESTIONS!!A3:Z1000";
+var LOCATION_QUESTIONS = "1lgdwXd2iCPIWMf6fppnZn9TtHz8odYnj91JqDL6r9dg/values/QUESTIONS!A3:Z1000";
 var LOCATION_HELP = "1lgdwXd2iCPIWMf6fppnZn9TtHz8odYnj91JqDL6r9dg/values/HELP!A2:Z1000";
 
 var imagePrefix = "";
@@ -27,10 +30,15 @@ var handlers = {
         this.handler.state = states.START;
         this.emitWithState("SessionEndedRequest");
      },
+    "System.ExceptionEncountered": function() {
+        this.emit(":responseReady");
+    },
     "Unhandled": function() {
+        console.log("UNHANDLED EVENT " + JSON.stringify(this));
         this.handler.state = states.START;
         this.emitWithState(this.event.request.intent.name);
-    }
+    },
+
 };
 
 var startHandlers = Alexa.CreateStateHandler(states.START,{
@@ -54,7 +62,8 @@ var startHandlers = Alexa.CreateStateHandler(states.START,{
         }
     },
     "MeetingAudioIntent": function () {
-        this.response.audioPlayer("play", "REPLACE_ALL", "https://internal.genoatwp.com/webdocuments/public/audio/Trustee/2018/2018-01-22%20Trustee%20Zoning%20Meeting.mp3", "token", null, 0);
+        this.response.speak("here is the audio from January 22nd, 2018 special meeting.").audioPlayerPlay("REPLACE_ALL", "https://s3.amazonaws.com/genoatownship/meetingaudio/2018-01-22-Trustee-Zoning-Meeting.mp3", "token", null, 0);
+        //audioPlayerPlay(behavior, url, token, expectedPreviousToken, offsetInMilliseconds)
         console.log("THIS.RESPONSE FOR AUDIO MEETING FILE = " + JSON.stringify(this.response));
         this.emit(":responseReady");
     },
@@ -115,11 +124,12 @@ var startHandlers = Alexa.CreateStateHandler(states.START,{
     "Unhandled": function() {
         console.log("UNHANDLED EVENT!! " + JSON.stringify(this.event));
         var speechText = getRandomConfusionMessage.call(this) + getRandomQuestion();
-        sendSMS(slotValue, (result) => {
-            console.log("RETURNED FROM SMS.");
-            this.response.speak(speechText).listen(getRandomQuestion());
-            this.emit(":responseReady");
-        });
+        this.response.speak(speechText).listen(getRandomQuestion());
+        this.emit(":responseReady");
+    },
+    "System.ExceptionEncountered": function() {
+        this.response.speak(getRandomWelcomeQuestion()).audioPlayerStop();
+        this.emit(":responseReady");
     }
 });
 
@@ -229,7 +239,7 @@ OBJECT REFERENCE
 1 - PRNOUNCIATION
 2 - SPEECH DATA
 3 - CARD TITLE
-4- CARD TEXT 
+4 - CARD TEXT 
 5 - SMALL CARD IMAGE
 6 - LARGE CARD IMAGE
 */
@@ -473,11 +483,11 @@ function httpsGet(location, callback) {
 
 }
 
-exports.handler = function (event, context) {
+exports.handler = dashbot.handler((event, context, callback) => {
     console.log("EVENT " + JSON.stringify(event));
     console.log("CONTEXT " + JSON.stringify(context));
     const alexa = Alexa.handler(event, context);
     alexa.appId = APP_ID;
     alexa.registerHandlers(handlers, startHandlers);
     alexa.execute();
-};
+});
