@@ -1,0 +1,370 @@
+{
+    "languageModel": {
+      "types": [
+        {
+          "name": "Answer",
+          "values": [
+            {
+              "id": null,
+              "name": {
+                "value": "Board of Trustees",
+                "synonyms": [
+                  "The Board",
+                  "Board",
+                  "trustees"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Board Meetings",
+                "synonyms": []
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Connie Goodman",
+                "synonyms": [
+                  "connie",
+                  "goodman"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Frank Dantonio",
+                "synonyms": [
+                  "frank",
+                  "dantonio"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Karl Gebhardt",
+                "synonyms": [
+                  "karl gebhardt"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Paul Wise",
+                "synonyms": [
+                  "paul",
+                  "wise"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Leslie Strader",
+                "synonyms": [
+                  "leslie",
+                  "strader"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Joe Schafer",
+                "synonyms": [
+                  "joe",
+                  "schafer"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Susan Dorsch",
+                "synonyms": [
+                  "susan",
+                  "dorsch"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Jennifer Elliott",
+                "synonyms": [
+                  "jennifer",
+                  "elliott"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Joe Ponzi",
+                "synonyms": [
+                  "joe",
+                  "ponzi"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Gary Honeycutt",
+                "synonyms": [
+                  "gary",
+                  "honeycutt"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Easter Egg Hunt",
+                "synonyms": [
+                  "egg hunt",
+                  "easter"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Movie Nights",
+                "synonyms": [
+                  "movie night",
+                  "movies"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "National Night Out",
+                "synonyms": [
+                  "night out"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Fishing Day",
+                "synonyms": [
+                  "fishing"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Trick or Treat Village",
+                "synonyms": [
+                  "village",
+                  "trick or treat"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Beggar's Night",
+                "synonyms": [
+                  "halloween",
+                  "trick or treat"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Linda Greco",
+                "synonyms": [
+                  "linda",
+                  "greco"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Center Green Park",
+                "synonyms": [
+                  "center green"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Community Hall Park",
+                "synonyms": [
+                  "community hall"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Freeman Road Park",
+                "synonyms": [
+                  "freeman road"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Hilmar Park",
+                "synonyms": [
+                  "hilmar"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Jaycox Park",
+                "synonyms": [
+                  "jaycox"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "McNamara Park",
+                "synonyms": [
+                  "mcnamara"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Worthington Road Park",
+                "synonyms": [
+                  "worthington road"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "Parks",
+                "synonyms": []
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "brush burning",
+                "synonyms": [
+                  "can I burn brush",
+                  "can I burn leaves",
+                  "can I burn debris",
+                  "burning leaves",
+                  "burning"
+                ]
+              }
+            },
+            {
+              "id": null,
+              "name": {
+                "value": "car seat inspections",
+                "synonyms": [
+                  "car seat check",
+                  "check my car seat",
+                  "install my car seat",
+                  "car seat",
+                  "can I get my car seat checked",
+                  "can I get my car seat inspected"
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.PauseIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.ResumeIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AnswerIntent",
+          "samples": [
+            "who is {answer}",
+            "tell me about {answer}",
+            "what is {answer}",
+            "{answer}",
+            "about {answer}"
+          ],
+          "slots": [
+            {
+              "name": "answer",
+              "type": "Answer"
+            }
+          ]
+        },
+        {
+          "name": "EventsIntent",
+          "samples": [
+            "What kinds of events do you host",
+            "what events are there",
+            "what events are available",
+            "what is the next event",
+            "events"
+          ],
+          "slots": []
+        },
+        {
+          "name": "GetRandomAnswerIntent",
+          "samples": [
+            "give me something random",
+            "tell me something rando",
+            "tell me something interesting"
+          ],
+          "slots": []
+        },
+        {
+          "name": "MeetingAudioIntent",
+          "samples": [
+            "play the meeting audio"
+          ],
+          "slots": []
+        },
+        {
+          "name": "NewsIntent",
+          "samples": [
+            "what's new",
+            "what is the news",
+            "give me the news",
+            "share the news",
+            "read me the news"
+          ],
+          "slots": []
+        }
+      ],
+      "invocationName": "genoa township"
+    }
+  }
