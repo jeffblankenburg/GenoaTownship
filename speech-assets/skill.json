@@ -1,0 +1,55 @@
+{
+    "skillManifest": {
+      "publishingInformation": {
+        "locales": {
+          "en-US": {
+            "summary": "This is the skill for Genoa Township skill for residents.",
+            "examplePhrases": [
+              "Alexa, open Genoa Township.",
+              "Alexa, ask Genoa Township to play the meeting audio.",
+              "Alexa, ask Genoa Township about Leslie Strader."
+            ],
+            "name": "Genoa Township",
+            "smallIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/212e/1011525ea5a043e3bb3ed8b885598d71/APP_ICON?versionId=KAZNl0EDg.sEpoyczk8a3peEOK_NttoJ&AWSAccessKeyId=AKIAI3X6PUXD7CU5F5BQ&Expires=1517684734&Signature=2VRruKiN3b7KLD0eZ8M5Jtl5L%2Fk%3D",
+            "description": "This is the skill for Genoa Township skill for residents.",
+            "largeIconUri": "https://s3.amazonaws.com/CAPS-SSE/echo_developer/f79b/2c5194536292419a935cf4e976849cb9/APP_ICON_LARGE?versionId=_AvFF5vBmGuuG1iHkTamtyUIO1aJrc1o&AWSAccessKeyId=AKIAI3X6PUXD7CU5F5BQ&Expires=1517684734&Signature=cP4Z8lJonb7dMD7IhN8tuZcn5Cw%3D"
+          }
+        },
+        "isAvailableWorldwide": true,
+        "testingInstructions": "No instructions.",
+        "category": "SCHOOLS",
+        "distributionCountries": []
+      },
+      "apis": {
+        "custom": {
+          "endpoint": {
+            "sourceDir": "lambda/custom"
+          },
+          "interfaces": [
+            {
+              "type": "AUDIO_PLAYER"
+            }
+          ]
+        }
+      },
+      "manifestVersion": "1.0",
+      "permissions": [
+        {
+          "name": "alexa::devices:all:address:full:read"
+        }
+      ],
+      "privacyAndCompliance": {
+        "allowsPurchases": false,
+        "locales": {
+          "en-US": {
+            "privacyPolicyUrl": "http://genotwp.com"
+          }
+        },
+        "isExportCompliant": true,
+        "containsAds": false,
+        "isChildDirected": false,
+        "usesPersonalInfo": false
+      }
+    }
+  }
+  
