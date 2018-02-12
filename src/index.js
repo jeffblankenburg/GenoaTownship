@@ -8,6 +8,11 @@ var dashbot = require("dashbot")("gvq1jK9xKT27awQBFgO11zBUfW4usyjBFVxSjC5m").ale
 var audioData = require('./audioAssets.js');
 var controller = require('./audioController.js');
 
+const makeTextContent = Alexa.utils.TextUtils.makeTextContent;
+const makePlainText = Alexa.utils.TextUtils.makePlainText;
+const makeRichText = Alexa.utils.TextUtils.makeRichText;
+const makeImage = Alexa.utils.ImageUtils.makeImage;
+
 var APP_ID = undefined;  // TODO replace with your app ID (OPTIONAL).
 
 var LOCATION_NEWS = "1lgdwXd2iCPIWMf6fppnZn9TtHz8odYnj91JqDL6r9dg/values/NEWS!A3:Z1000";
@@ -71,14 +76,22 @@ var startHandlers = Alexa.CreateStateHandler(states.START,{
         console.log("FULL REQUEST = " + JSON.stringify(this.event));
         httpsGet(LOCATION_NEWS, (result) => {
             console.log("RESULT = " + JSON.stringify(result));
+            console.log("BUILDING RESPONSE");
             var date = new Date();
             var speechText = "Here is your Genoa Township news for " + date.toDateString() + ". " + getVoiceNews(result) + getRandomQuestion();
             this.response.speak(speechText).listen(getRandomQuestion());
-            //this.response.speak("I don't have any news yet.  Is there something else I can help you with?").listen(getRandomQuestion());
             this.response.cardRenderer("GENOA TOWNSHIP NEWS FOR " + date.toDateString(), getCardNews(result), {smallImageUrl: "https://s3.amazonaws.com/genoatownship/genoatownship.jpg", largeImageUrl: "https://s3.amazonaws.com/genoatownship/genoatownship.jpg"});
-            //if (supportsDisplay.call(this)) this.response.renderTemplate(buildListDisplayTemplateForNews(news));
+            //console.log("CHECKING FOR A DISPLAY");
+            /*if (supportsDisplay.call(this)) 
+            {
+                console.log("DEVICE HAS A DISPLAY.");
+                
+                this.response.renderTemplate(buildListDisplayTemplateForNews(result));
+            }*/
+            //console.log("ENDING DISPLAY CHECK.");
             this.emit(":responseReady");
         });
+        
     },
     "GetRandomItemIntent": function () {
         sendResponse.call(this, null);
@@ -203,6 +216,31 @@ function getAnswerData(data, value)
         });
         return answerData;
     }
+}
+
+function buildListDisplayTemplateForNews(news)
+{
+    var builder = new Alexa.templateBuilders.ListTemplate1Builder();
+
+    var items = news.values;
+    console.log("ITEMS = " + JSON.stringify(items));
+    var itemList = [];
+
+    for (var i = 0; i< items.length; i++)
+    {
+        var primaryText = "<font size='4'>" + items[i][0] + "</font>";
+        var secondaryText = "<font size='2'>" + items[i][1] + "</font>";
+        var textContent = makeTextContent(makeRichText(primaryText), makeRichText(secondaryText), null);
+        var newItem = {"textContent": textContent};
+        console.log("NEW ITEM = " + JSON.stringify(newItem));
+        itemList.push(newItem);
+    }
+
+    console.log("ITEMLIST = " + itemList);
+
+    let multiEntryTemplate = builder.setTitle("Genoa Township News").setToken("NEWS").setListItems(itemList).build();
+    console.log("MULTI ENTRY TEMPLATE = " + JSON.stringify(multiEntryTemplate));
+    return multiEntryTemplate;
 }
 
 function getCardTitle(answer)
