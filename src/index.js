@@ -5,8 +5,6 @@ var AWS = require("aws-sdk");
 var https = require("https");
 var util = require("util");
 var dashbot = require("dashbot")("gvq1jK9xKT27awQBFgO11zBUfW4usyjBFVxSjC5m").alexa;
-var audioData = require('./audioAssets.js');
-var controller = require('./audioController.js');
 
 const makeTextContent = Alexa.utils.TextUtils.makeTextContent;
 const makePlainText = Alexa.utils.TextUtils.makePlainText;
@@ -19,6 +17,7 @@ var LOCATION_NEWS = "1lgdwXd2iCPIWMf6fppnZn9TtHz8odYnj91JqDL6r9dg/values/NEWS!A3
 var LOCATION_ANSWERS = "1lgdwXd2iCPIWMf6fppnZn9TtHz8odYnj91JqDL6r9dg/values/ANSWERS!A3:Z1000";
 var LOCATION_QUESTIONS = "1lgdwXd2iCPIWMf6fppnZn9TtHz8odYnj91JqDL6r9dg/values/QUESTIONS!A3:Z1000";
 var LOCATION_HELP = "1lgdwXd2iCPIWMf6fppnZn9TtHz8odYnj91JqDL6r9dg/values/HELP!A2:Z1000";
+var LOCATION_AUDIO = "1lgdwXd2iCPIWMf6fppnZn9TtHz8odYnj91JqDL6r9dg/values/MEETINGAUDIO!A2:Z1000";
 
 var imagePrefix = "";
 
@@ -31,6 +30,14 @@ var handlers = {
         this.handler.state = states.START;
         this.emitWithState("LaunchRequest");
      },
+     "AMAZON.PauseIntent": function () {
+        this.response.speak(getRandomQuestion()).listen(getRandomQuestion());
+        this.response.audioPlayerStop();
+        this.emit(":responseReady");
+    },
+    "AMAZON.ResumeIntent": function () {
+        this.emit(":responseReady");
+    },
     "SessionEndedRequest": function() {
         this.handler.state = states.START;
         this.emitWithState("SessionEndedRequest");
@@ -39,9 +46,19 @@ var handlers = {
         this.emit(":responseReady");
     },
     "Unhandled": function() {
-        console.log("UNHANDLED EVENT " + JSON.stringify(this));
+        
         this.handler.state = states.START;
-        this.emitWithState(this.event.request.intent.name);
+        
+        if (this.event.request.type == "IntentRequest")
+        {
+            console.log("UNHANDLED EVENT " + JSON.stringify(this));
+            this.emitWithState(this.event.request.intent.name);
+        }
+        else
+        {
+            console.log("AUDIO EVENT " + JSON.stringify(this.event.request));
+            this.emit(':responseReady');
+        }
     },
 
 };
@@ -67,10 +84,15 @@ var startHandlers = Alexa.CreateStateHandler(states.START,{
         }
     },
     "MeetingAudioIntent": function () {
-        this.response.speak("here is the audio from January 22nd, 2018 special meeting.").audioPlayerPlay("REPLACE_ALL", "https://s3.amazonaws.com/genoatownship/meetingaudio/2018-01-22-Trustee-Zoning-Meeting.mp3", "token", null, 0);
-        //audioPlayerPlay(behavior, url, token, expectedPreviousToken, offsetInMilliseconds)
-        console.log("THIS.RESPONSE FOR AUDIO MEETING FILE = " + JSON.stringify(this.response));
-        this.emit(":responseReady");
+        httpsGet(LOCATION_AUDIO, (result) => {
+            console.log("AUDIO DATA = " + JSON.stringify(result));
+            var date = new Date(result.values[0][0]);
+            console.log(date);
+            this.response.speak("Here is the audio from the " + result.values[0][1] + " on " + (parseInt(date.getMonth()) + 1) + "/" + date.getDate() + "/" + date.getFullYear()).audioPlayerPlay("REPLACE_ALL", result.values[0][2].replace("http:", "https:"), "token", null, 0);
+            console.log("FULL RESPONSE = " + JSON.stringify(this.response));
+            this.emit(":responseReady");
+        });
+        
     },
     "NewsIntent": function () {
         console.log("FULL REQUEST = " + JSON.stringify(this.event));
@@ -135,7 +157,7 @@ var startHandlers = Alexa.CreateStateHandler(states.START,{
         this.emit(":responseReady");
      },
     "Unhandled": function() {
-        console.log("UNHANDLED EVENT!! " + JSON.stringify(this.event));
+        console.log("UNHANDLED EVENT IN START STATE!! " + JSON.stringify(this.event));
         var speechText = getRandomConfusionMessage.call(this) + getRandomQuestion();
         this.response.speak(speechText).listen(getRandomQuestion());
         this.emit(":responseReady");
