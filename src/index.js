@@ -26,16 +26,22 @@ var states = {
 };
 
 var handlers = {
-     "LaunchRequest": function() {
+    "LaunchRequest": function() {
         this.handler.state = states.START;
         this.emitWithState("LaunchRequest");
-     },
-     "AMAZON.PauseIntent": function () {
+    },
+    "AMAZON.PauseIntent": function () {
+        console.log("AMAZON.PAUSEINTENT");
+        console.log("this.event = " + JSON.stringify(this.event));
+        console.log("OFFSET VALUE = " + this.event.context.AudioPlayer.offsetInMilliseconds);
+        this.attributes["audioOffset"] = this.event.context.AudioPlayer.offsetInMilliseconds;
         this.response.speak(getRandomQuestion()).listen(getRandomQuestion());
         this.response.audioPlayerStop();
         this.emit(":responseReady");
     },
     "AMAZON.ResumeIntent": function () {
+        console.log("AMAZON.RESUMEINTENT");
+        getAudioPlayerResponse.call(this);
         this.emit(":responseReady");
     },
     "SessionEndedRequest": function() {
@@ -56,7 +62,7 @@ var handlers = {
         }
         else
         {
-            console.log("AUDIO EVENT " + JSON.stringify(this.event.request));
+            //console.log("AUDIO EVENT " + JSON.stringify(this.event.request));
             this.emit(':responseReady');
         }
     },
@@ -88,8 +94,11 @@ var startHandlers = Alexa.CreateStateHandler(states.START,{
             console.log("AUDIO DATA = " + JSON.stringify(result));
             var date = new Date(result.values[0][0]);
             console.log(date);
-            this.response.speak("Here is the audio from the " + result.values[0][1] + " on " + (parseInt(date.getMonth()) + 1) + "/" + date.getDate() + "/" + date.getFullYear()).audioPlayerPlay("REPLACE_ALL", result.values[0][2].replace("http:", "https:"), "token", null, 0);
-            console.log("FULL RESPONSE = " + JSON.stringify(this.response));
+            this.attributes["audioDate"] = result.values[0][0];
+            this.attributes["audioFilename"] = result.values[0][2];
+            this.attributes["audioTitle"] = result.values[0][1];
+            this.attributes["audioOffset"] = 0;
+            getAudioPlayerResponse.call(this);
             this.emit(":responseReady");
         });
         
@@ -115,8 +124,22 @@ var startHandlers = Alexa.CreateStateHandler(states.START,{
         });
         
     },
-    "GetRandomItemIntent": function () {
+    "GetRandomAnswerIntent": function () {
         sendResponse.call(this, null);
+    },
+    "AMAZON.PauseIntent": function () {
+        console.log("AMAZON.PAUSEINTENT - START STATE");
+        console.log("this.event = " + this.event);
+        console.log("OFFSET VALUE = " + this.event.context.AudioPlayer.offsetInMilliseconds);
+        this.attributes["audioOffset"] = this.event.context.AudioPlayer.offsetInMilliseconds;
+        this.response.speak(getRandomQuestion()).listen(getRandomQuestion());
+        this.response.audioPlayerStop();
+        this.emit(":responseReady");
+    },
+    "AMAZON.ResumeIntent": function () {
+        console.log("AMAZON.RESUMEINTENT - START STATE");
+        getAudioPlayerResponse.call(this);
+        this.emit(":responseReady");
     },
     "AMAZON.CancelIntent": function () {
         var speechText = getRandomGoodbyeMessage();
@@ -158,8 +181,13 @@ var startHandlers = Alexa.CreateStateHandler(states.START,{
      },
     "Unhandled": function() {
         console.log("UNHANDLED EVENT IN START STATE!! " + JSON.stringify(this.event));
-        var speechText = getRandomConfusionMessage.call(this) + getRandomQuestion();
-        this.response.speak(speechText).listen(getRandomQuestion());
+
+        if (this.event.request.type == "IntentRequest")
+        {
+            var speechText = getRandomConfusionMessage.call(this) + getRandomQuestion();
+            this.response.speak(speechText).listen(getRandomQuestion());
+        }
+        
         this.emit(":responseReady");
     },
     "System.ExceptionEncountered": function() {
@@ -217,6 +245,24 @@ function sendResponse(item)
             this.emit(":responseReady");
         }
     });
+}
+
+function getAudioPlayerResponse()
+{
+    console.log("GETTING AUDIO PLAYER RESPONSE.")
+    var title = this.attributes["audioTitle"];
+    var filename = this.attributes["audioFilename"];
+    var date = new Date(this.attributes["audioDate"]);
+    var offset = this.attributes["audioOffset"];
+    console.log("OFFSET = " + offset);
+
+    var speakText = "";
+    if (offset === 0) speakText = "Here is the audio from the " + title + " on " + (parseInt(date.getMonth()) + 1) + "/" + date.getDate() + "/" + date.getFullYear();
+    else speakText = "Resuming the audio from the " + title + " on " + (parseInt(date.getMonth()) + 1) + "/" + date.getDate() + "/" + date.getFullYear()
+
+    console.log("SPEAKTEXT = " + speakText);
+    this.response.speak(speakText).audioPlayerPlay("REPLACE_ALL", filename.replace("http:", "https:"), "token", null, offset);
+    console.log("FULL AUDIO RESPONSE = " + JSON.stringify(this.response));
 }
 
 var isRandomAnswer = false;
@@ -284,13 +330,13 @@ function getVoiceSpeechResponse(answer)
 function getSmallCardImage(answer)
 {
     if ((answer[5] === undefined)||(answer[5] === "")) return "https://s3.amazonaws.com/genoatownship/genoatownship.jpg";
-    else return answer[5];
+    else return answer[5].replace("http://", "https://");
 }
 
 function getLargeCardImage(answer)
 {
     if ((answer[6] === undefined)||(answer[6] === "")) return "https://s3.amazonaws.com/genoatownship/genoatownship.jpg";
-    else return answer[6];
+    else return answer[6].replace("http://", "https://");
 }
 
 /*
@@ -430,9 +476,9 @@ function getRandomWelcomeQuestion()
 
 function getRandomHelpMessage(data)
 {
-    var random = getRandom(0, data.length-1);
+    var random = getRandom(0, data.values.length-1);
     console.log("RANDOM HELP MESSAGE = " + JSON.stringify(random));
-    return data[random][1];
+    return data.values[random];
 }
 
 
@@ -548,6 +594,7 @@ exports.handler = dashbot.handler((event, context, callback) => {
     console.log("CONTEXT " + JSON.stringify(context));
     const alexa = Alexa.handler(event, context);
     alexa.appId = APP_ID;
+    alexa.dynamoDBTableName = 'GenoaTownship';
     alexa.registerHandlers(handlers, startHandlers);
     alexa.execute();
 });
